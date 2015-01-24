@@ -51,6 +51,7 @@
   </Choose>
   <ItemGroup>
     <Compile Include="EngineTests\EngineTests.cs" />
+    <Compile Include="EngineTests\Features\CastleTests.cs" />
     <Compile Include="EngineTests\Features\PiecePromotionTests.cs" />
     <Compile Include="GameTests\Attacks.cs" />
     <Compile Include="Generators\DiagonalGeneratorTests.cs" />

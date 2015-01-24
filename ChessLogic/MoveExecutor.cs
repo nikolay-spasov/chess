@@ -1,7 +1,6 @@
 ﻿namespace ChessLogic.Generators
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Text;
 
@@ -118,7 +117,8 @@
                     !game.FieldIsUnderAttack(move.Source.Row, move.Source.Col + 2))
                 {
                     builder[move.Source.Row * 8 + 7] = BoardConstants.Empty;
-                    builder[move.Destination.Row * 8 + 5] = GetAllyRook();
+                    builder[move.Source.Row * 8 + 5] = GetAllyRook();
+                    builder[move.Destination.Row * 8 + move.Destination.Col] = GetAllyKing(game);
 
                     game.CanCastleKingSide = false;
                     game.CanCastleQueenSide = false;
@@ -134,7 +134,8 @@
                     !game.FieldIsUnderAttack(move.Source.Row, move.Source.Col - 2))
                 {
                     builder[move.Source.Row * 8] = BoardConstants.Empty;
-                    builder[move.Destination.Row * 8 + 2] = GetAllyRook();
+                    builder[move.Destination.Row * 8 + 3] = GetAllyRook();
+                    builder[move.Destination.Row * 8 + move.Destination.Col] = GetAllyKing(game);
 
                     game.CanCastleKingSide = false;
                     game.CanCastleQueenSide = false;
@@ -216,11 +217,14 @@
             }
         }
 
+        private char GetAllyKing(Game game)
+        {
+            return game.WhiteTurn ? BoardConstants.WhiteKing : BoardConstants.BlackKing;
+        }
+
         private Square GetKingPosition(Game game)
         {
-            var king = game.WhiteTurn
-                ? BoardConstants.WhiteKing
-                : BoardConstants.BlackKing;
+            var king = GetAllyKing(game);
 
             for (int row = 0; row < 8; row++)
             {

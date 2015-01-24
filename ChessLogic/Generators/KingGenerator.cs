@@ -75,7 +75,6 @@
                     var moveInfo = new MoveInfo
                     {
                         KingSideCastle = true,
-                        KingMoved = true
                     };
 
                     var move = new Move(row, col, initialRow, kingSideCol, moveInfo);
@@ -91,7 +90,6 @@
                     var moveInfo = new MoveInfo
                     {
                         QueenSideCastle = true,
-                        KingMoved = true
                     };
 
                     var move = new Move(row, col, initialRow, queenSideCol, moveInfo);
