@@ -35,7 +35,6 @@ namespace ConsoleTester
                     var moves = generator.Generate().ToList();
                     if (moves.Count == 0) break;
                     InputMove inpMove = null;
-                    Game newGame = null;
                     ValidationResult s = null;
                     for (int i = 0; i < moves.Count; i++)
                     {
@@ -64,18 +63,30 @@ namespace ConsoleTester
 
         static Game CreateGame()
         {
-            var board =
-                "rnbqkbnr" +
-                "pppppppp" +
-                "EEEEEEEE" +
-                "EEEEEEEE" +
-                "EEEEEEEE" +
-                "EEEEEEEE" +
-                "PPPPPPPP" +
-                "RNBQKBNR";
+            //var board =
+            //    "rnbqkbnr" +
+            //    "pppppppp" +
+            //    "EEEEEEEE" +
+            //    "EEEEEEEE" +
+            //    "EEEEEEEE" +
+            //    "EEEEEEEE" +
+            //    "PPPPPPPP" +
+            //    "RNBQKBNR";
 
             //board = "rEbEEbnrEEpnEkpEppEEEEEpEEBpppEEEEEEPEPPNEEPEEENPPPqEPERREEQKBEE";
-            return new Game(board, true, true, true, null);
+            var board =
+                "EEEkEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEPpEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEKEEEE";
+
+            var game = new Game(board, true, true, true, new Move(new Square(1, 3), new Square(3, 3)));
+
+            return game;
         }
 
         static InputMove CreateMove(List<Move> moves, Game game)

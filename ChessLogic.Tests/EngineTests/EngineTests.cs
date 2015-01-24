@@ -238,5 +238,129 @@
             Assert.IsTrue(result.IsValid);
             Assert.AreEqual(null, result.EndGameState);
         }
+
+        [TestMethod]
+        public void WhiteRightCanTakeWithEnPassant()
+        {
+            var board =
+                "EEEkEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEPpEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEKEEEE";
+            var game = new Game(board, true, true, true, null);
+            game.LastMove = new Move(new Square(1, 3), new Square(3, 3));
+
+            var result = Engine.Execute(new InputMove
+            {
+                SourceRow = 3,
+                SourceCol = 2,
+                DestinationRow = 2,
+                DestinationCol = 3,
+                Game = game
+            });
+
+            Assert.IsTrue(result.IsValid);
+            Assert.AreEqual(null, result.EndGameState);
+            Assert.AreEqual(BoardConstants.Empty, result.Game.GetPieceAt(3, 2));
+            Assert.AreEqual(BoardConstants.WhitePawn, result.Game.GetPieceAt(2, 3));
+            Assert.AreEqual(BoardConstants.Empty, result.Game.GetPieceAt(3, 3));
+        }
+
+        [TestMethod]
+        public void WhiteLeftCanTakeWithEnPassant()
+        {
+            var board =
+                "EEEkEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EpPEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEKEEEE";
+            var game = new Game(board, true, true, true, null);
+            game.LastMove = new Move(new Square(1, 1), new Square(3, 1));
+
+            var result = Engine.Execute(new InputMove
+            {
+                SourceRow = 3,
+                SourceCol = 2,
+                DestinationRow = 2,
+                DestinationCol = 1,
+                Game = game
+            });
+
+            Assert.IsTrue(result.IsValid);
+            Assert.AreEqual(null, result.EndGameState);
+            Assert.AreEqual(BoardConstants.Empty, result.Game.GetPieceAt(3, 2));
+            Assert.AreEqual(BoardConstants.WhitePawn, result.Game.GetPieceAt(2, 1));
+            Assert.AreEqual(BoardConstants.Empty, result.Game.GetPieceAt(3, 1));
+        }
+
+        [TestMethod]
+        public void BlackRightCanTakeWithEnPassant()
+        {
+            var board =
+                "EEEkEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEpPEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEKEEEE";
+            var game = new Game(board, false, true, true, null);
+            game.LastMove = new Move(new Square(6, 3), new Square(4, 3));
+
+            var result = Engine.Execute(new InputMove
+            {
+                SourceRow = 4,
+                SourceCol = 2,
+                DestinationRow = 5,
+                DestinationCol = 3,
+                Game = game
+            });
+
+            Assert.IsTrue(result.IsValid);
+            Assert.AreEqual(null, result.EndGameState);
+            Assert.AreEqual(BoardConstants.Empty, result.Game.GetPieceAt(6, 3));
+            Assert.AreEqual(BoardConstants.BlackPawn, result.Game.GetPieceAt(5, 3));
+            Assert.AreEqual(BoardConstants.Empty, result.Game.GetPieceAt(4, 3));
+        }
+
+        [TestMethod]
+        public void BlackLeftCanTakeWithEnPassant()
+        {
+            var board =
+                "EEEkEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EPpEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEKEEEE";
+            var game = new Game(board, false, true, true, null);
+            game.LastMove = new Move(new Square(6, 1), new Square(4, 1));
+
+            var result = Engine.Execute(new InputMove
+            {
+                SourceRow = 4,
+                SourceCol = 2,
+                DestinationRow = 5,
+                DestinationCol = 1,
+                Game = game
+            });
+
+            Assert.IsTrue(result.IsValid);
+            Assert.AreEqual(null, result.EndGameState);
+            Assert.AreEqual(BoardConstants.Empty, result.Game.GetPieceAt(6, 3));
+            Assert.AreEqual(BoardConstants.BlackPawn, result.Game.GetPieceAt(5, 1));
+            Assert.AreEqual(BoardConstants.Empty, result.Game.GetPieceAt(4, 1));
+        }
     }
 }

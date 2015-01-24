@@ -40,5 +40,14 @@
 
             return result;
         }
+
+        public bool EnPassantPossible
+        {
+            get
+            {
+                return (Source.Row == 1 && Destination.Row == 3) ||
+                    (Source.Row == 6 && Destination.Row == 4);
+            }
+        }
     }
 }

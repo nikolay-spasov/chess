@@ -71,97 +71,86 @@
             {
                 MovePiece(move, sourcePiece, builder);
                 game.Board = builder.ToString();
-                //game.Board = builder.ToString();
-                //game.WhiteTurn = !game.WhiteTurn;
-                //return game.Clone();
+            }
+            else if (move.Info.EnPassant && 
+                game.LastMove != null && 
+                game.LastMove.EnPassantPossible)
+            {
+                MovePiece(move, sourcePiece, builder);
+                builder[game.LastMove.Destination.Row * 8 + game.LastMove.Destination.Col] = BoardConstants.Empty;
+                game.Board = builder.ToString();
+            }
+            else if (move.Info.KingMoved)
+            {
+                if (!game.FieldIsUnderAttack(move.Destination.Row, move.Destination.Col))
+                {
+                    game.CanCastleKingSide = false;
+                    game.CanCastleQueenSide = false;
+                    MovePiece(move, sourcePiece, builder);
+                    game.Board = builder.ToString();
+                }
+                else
+                {
+                    return backup.Clone();
+                }
+            }
+            else if (move.Info.KingSideCastle)
+            {
+                if (!game.FieldIsUnderAttack(move.Source.Row, move.Source.Col) &&
+                    !game.FieldIsUnderAttack(move.Source.Row, move.Source.Col + 1) &&
+                    !game.FieldIsUnderAttack(move.Source.Row, move.Source.Col + 2))
+                {
+                    builder[move.Source.Row * 8 + 7] = BoardConstants.Empty;
+                    builder[move.Destination.Row * 8 + 5] = GetAllyRook();
+
+                    game.CanCastleKingSide = false;
+                    game.CanCastleQueenSide = false;
+
+                    MovePiece(move, sourcePiece, builder);
+                    game.Board = builder.ToString();
+                }
+            }
+            else if (move.Info.QueenSideCastle)
+            {
+                if (!game.FieldIsUnderAttack(move.Source.Row, move.Source.Col) &&
+                    !game.FieldIsUnderAttack(move.Source.Row, move.Source.Col - 1) &&
+                    !game.FieldIsUnderAttack(move.Source.Row, move.Source.Col - 2))
+                {
+                    builder[move.Source.Row * 8] = BoardConstants.Empty;
+                    builder[move.Destination.Row * 8 + 2] = GetAllyRook();
+
+                    game.CanCastleKingSide = false;
+                    game.CanCastleQueenSide = false;
+
+                    MovePiece(move, sourcePiece, builder);
+                    game.Board = builder.ToString();
+                }
+            }
+            else if (move.Info.KingRookMovedFromInitial)
+            {
+                MovePiece(move, sourcePiece, builder);
+                game.Board = builder.ToString();
+                game.CanCastleKingSide = false;
+            }
+            else if (move.Info.QueenRookMovedFromInitial)
+            {
+                MovePiece(move, sourcePiece, builder);
+                game.Board = builder.ToString();
+                game.CanCastleQueenSide = false;
             }
             else
             {
-                if (move.Info.EnPassant)
-                {
-                    if (game.LastMove != null)
-                    {
-
-                    }
-                    else
-                    {
-                        return backup.Clone();
-                    }
-                }
-                else if (move.Info.KingMoved)
-                {
-                    if (!game.FieldIsUnderAttack(move.Destination.Row, move.Destination.Col))
-                    {
-                        game.CanCastleKingSide = false;
-                        game.CanCastleQueenSide = false;
-                        MovePiece(move, sourcePiece, builder);
-                        game.Board = builder.ToString();
-                        //game.Board = builder.ToString();
-                        //game.WhiteTurn = !game.WhiteTurn;
-                    }
-                    else
-                    {
-                        return backup.Clone();
-                    }
-                }
-                else if (move.Info.KingSideCastle)
-                {
-                    if (!game.FieldIsUnderAttack(move.Source.Row, move.Source.Col) &&
-                        !game.FieldIsUnderAttack(move.Source.Row, move.Source.Col + 1) &&
-                        !game.FieldIsUnderAttack(move.Source.Row, move.Source.Col + 2))
-                    {
-                        builder[move.Source.Row * 8 + 7] = BoardConstants.Empty;
-                        builder[move.Destination.Row * 8 + 5] = GetAllyRook();
-
-                        game.CanCastleKingSide = false;
-                        game.CanCastleQueenSide = false;
-
-                        MovePiece(move, sourcePiece, builder);
-                        game.Board = builder.ToString();
-                        //game.WhiteTurn = !game.WhiteTurn;
-                    }
-                }
-                else if (move.Info.QueenSideCastle)
-                {
-                    if (!game.FieldIsUnderAttack(move.Source.Row, move.Source.Col) &&
-                        !game.FieldIsUnderAttack(move.Source.Row, move.Source.Col - 1) &&
-                        !game.FieldIsUnderAttack(move.Source.Row, move.Source.Col - 2))
-                    {
-                        builder[move.Source.Row * 8] = BoardConstants.Empty;
-                        builder[move.Destination.Row * 8 + 2] = GetAllyRook();
-
-                        game.CanCastleKingSide = false;
-                        game.CanCastleQueenSide = false;
-
-                        MovePiece(move, sourcePiece, builder);
-                        game.Board = builder.ToString();
-                        //game.WhiteTurn = !game.WhiteTurn;
-                    }
-                }
-                else if (move.Info.KingRookMovedFromInitial)
-                {
-                    MovePiece(move, sourcePiece, builder);
-                    game.Board = builder.ToString();
-                    game.CanCastleKingSide = false;
-                }
-                else if (move.Info.QueenRookMovedFromInitial)
-                {
-                    MovePiece(move, sourcePiece, builder);
-                    game.Board = builder.ToString();
-                    game.CanCastleQueenSide = false;
-                }
+                return backup.Clone();
             }
 
             if (KingIsUnderAttack(game))
             {
-                //executed = false;
-
                 return backup.Clone();
             }
 
             game.Board = builder.ToString();
             game.WhiteTurn = !game.WhiteTurn;
-            //executed = true;
+            game.LastMove = move.Clone();
             return game.Clone();
         }
 

@@ -60,31 +60,42 @@
 
         private void AddEnPassantMoves(HashSet<Move> moves, int row, int col)
         {
-            var destRow = row + direction;
-            if (row == enPassantRow &&
-                Game.IsOnTheBoard(destRow, col - 1) &&
-                Game.IsEmpty(destRow, col - 1) &&
-                Game.GetPieceAt(destRow, col) == enemyPawn)
+            if (Game.LastMove != null &&
+                !Game.LastMove.EnPassantPossible &&
+                Game.Board[Game.LastMove.Destination.Row * 8 + Game.LastMove.Destination.Col] != enemyPawn)
             {
-                var info = new MoveInfo
-                {
-                    EnPassant = true
-                };
-
-                var move = new Move(row, col, destRow, col - 1, info);
+                return;
             }
 
+            var destRow = row + direction;
+            var left = col - 1;
             if (row == enPassantRow &&
-                Game.IsOnTheBoard(destRow, col + 1) &&
-                Game.IsEmpty(destRow, col + 1) &&
-                Game.GetPieceAt(destRow, col) == enemyPawn)
+                Game.IsOnTheBoard(destRow, left) &&
+                Game.IsEmpty(destRow, left) &&
+                Game.GetPieceAt(row, left) == enemyPawn)
             {
                 var info = new MoveInfo
                 {
                     EnPassant = true
                 };
 
-                var move = new Move(row, col, destRow, col + 1, info);
+                var move = new Move(row, col, destRow, left, info);
+                moves.Add(move);
+            }
+
+            var right = col + 1;
+            if (row == enPassantRow &&
+                Game.IsOnTheBoard(destRow, right) &&
+                Game.IsEmpty(destRow, right) &&
+                Game.GetPieceAt(row, right) == enemyPawn)
+            {
+                var info = new MoveInfo
+                {
+                    EnPassant = true
+                };
+
+                var move = new Move(row, col, destRow, right, info);
+                moves.Add(move);
             }
         }
 
