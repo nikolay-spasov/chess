@@ -63,26 +63,26 @@ namespace ConsoleTester
 
         static Game CreateGame()
         {
-            //var board =
-            //    "rnbqkbnr" +
-            //    "pppppppp" +
-            //    "EEEEEEEE" +
-            //    "EEEEEEEE" +
-            //    "EEEEEEEE" +
-            //    "EEEEEEEE" +
-            //    "PPPPPPPP" +
-            //    "RNBQKBNR";
+            var board =
+                "rnbqkbnr" +
+                "pppppppp" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "PPPPPPPP" +
+                "RNBQKBNR";
 
             //board = "rEbEEbnrEEpnEkpEppEEEEEpEEBpppEEEEEEPEPPNEEPEEENPPPqEPERREEQKBEE";
-            var board =
-                "EEEkEEEE" +
-                "EEEEEEEE" +
-                "EEEEEEEE" +
-                "EEPpEEEE" +
-                "EEEEEEEE" +
-                "EEEEEEEE" +
-                "EEEEEEEE" +
-                "EEEKEEEE";
+            //var board =
+            //    "EEEkEEEE" +
+            //    "EEEEEEEE" +
+            //    "EEEEEEEE" +
+            //    "EEPpEEEE" +
+            //    "EEEEEEEE" +
+            //    "EEEEEEEE" +
+            //    "EEEEEEEE" +
+            //    "EEEKEEEE";
 
             var game = new Game(board, true, true, true, new Move(new Square(1, 3), new Square(3, 3)));
 
