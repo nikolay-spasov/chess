@@ -194,6 +194,11 @@
                 x.Destination.Row == move.DestinationRow &&
                 x.Destination.Col == move.DestinationCol);
 
+            if (m == null)
+            {
+                return null;
+            }
+
             if (move.PromotePiece.HasValue)
             {
                 m.Info = new MoveInfo

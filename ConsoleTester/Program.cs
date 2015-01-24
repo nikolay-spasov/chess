@@ -50,7 +50,7 @@ namespace ConsoleTester
                     //Console.WriteLine(s.EndGameState);
                     q.Enqueue(game.Board);
                     idd++;
-                    if (idd == 1) break;
+                    if (idd == 2000) break;
                 }
                 Console.WriteLine(DateTime.Now - start);
             }
@@ -63,15 +63,15 @@ namespace ConsoleTester
 
         static Game CreateGame()
         {
-            //var board =
-            //    "rnbqkbnr" +
-            //    "pppppppp" +
-            //    "EEEEEEEE" +
-            //    "EEEEEEEE" +
-            //    "EEEEEEEE" +
-            //    "EEEEEEEE" +
-            //    "PPPPPPPP" +
-            //    "RNBQKBNR";
+            var board =
+                "rnbqkbnr" +
+                "pppppppp" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "EEEEEEEE" +
+                "PPPPPPPP" +
+                "RNBQKBNR";
 
             //board = "rEbEEbnrEEpnEkpEppEEEEEpEEBpppEEEEEEPEPPNEEPEEENPPPqEPERREEQKBEE";
             //var board =
@@ -84,15 +84,15 @@ namespace ConsoleTester
             //    "EEEEEEEE" +
             //    "EEEKEEEE";
 
-            var board =
-                "EEErEkEE" +
-                "EEEEEEEE" +
-                "EEEEEEEE" +
-                "EEEEEEEE" +
-                "EEEEEEEE" +
-                "EEEEEEEp" +
-                "rEEEEEEP" +
-                "EEEEKEER";
+            //var board =
+            //    "EEErEkEE" +
+            //    "EEEEEEEE" +
+            //    "EEEEEEEE" +
+            //    "EEEEEEEE" +
+            //    "EEEEEEEE" +
+            //    "EEEEEEEp" +
+            //    "rEEEEEEP" +
+            //    "EEEEKEER";
 
             var game = new Game(board, true, true, true, new Move(new Square(1, 3), new Square(3, 3)));
 

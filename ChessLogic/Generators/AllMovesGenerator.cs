@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
 
     public class AllMovesGenerator
     {
@@ -12,7 +13,7 @@
             this.game = game;
         }
 
-        public HashSet<Move> Generate()
+        public List<Move> Generate()
         {
             var moves = new HashSet<Move>();
 
@@ -31,7 +32,7 @@
                 }
             }
 
-            return moves;
+            return moves.ToList();
         }
 
         private List<Generator> CreateGenerators(int row, int col)
