@@ -30,7 +30,7 @@ namespace Chess.Web
                 "~/Content/Site.css"
             ));
 
-            BundleTable.EnableOptimizations = true;
+            BundleTable.EnableOptimizations = false;
         }
     }
 }
