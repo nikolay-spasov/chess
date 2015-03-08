@@ -22,5 +22,20 @@
         {
             throw new NotImplementedException();
         }
+
+        public User GetByUsername(string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public User CreateUser(string username, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsEmailExists(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
