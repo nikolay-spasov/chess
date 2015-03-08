@@ -1,11 +1,20 @@
 ﻿@using System.Web.Optimization
+@using Chess.Web.HtmlHelpers
+
 <!DOCTYPE html>
 <html ng-app="app">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    <base href="http://localhost:1124/api" />
+    @if (Html.IsDebug())
+    { 
+        <base href="http://localhost:1124/api" />
+    }
+    else
+    {
+        <base href="http://web-chess.apphb.com/api" />
+    }
     @Styles.Render("~/Content/css")
 </head>
 <body>
