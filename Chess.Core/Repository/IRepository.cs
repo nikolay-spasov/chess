@@ -6,6 +6,6 @@
     {
         IEnumerable<T> GetAll();
 
-        T GetById();
+        T GetById(object id);
     }
 }

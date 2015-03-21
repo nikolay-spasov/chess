@@ -1,4 +1,4 @@
-﻿app.factory('authService', ['$injector', '$q', function ($injector, $q) {
+﻿app.factory('authService', ['$injector', '$q', 'modelStateErrorsService', 'notificationService', function ($injector, $q, modelStateErrorsService, notificationService) {
     'use strict';
 
     var login = function (credentials) {
@@ -9,10 +9,10 @@
             sessionStorage.setItem('authenticationData', JSON.stringify(authenticationResponse.data));
             deferred.resolve();
         }, function (error) {
-            //var errors = modelStateErrorsService.parseErrors(error);
-            //for (var i = 0; i < errors.length; i++) {
-            //    notificationService.error(errors[i]);
-            //}
+            var errors = modelStateErrorsService.parseErrors(error);
+            for (var i = 0; i < errors.length; i++) {
+                notificationService.error(errors[i]);
+            }
             deferred.reject(error);
         });
 
@@ -21,7 +21,7 @@
 
     var logout = function () {
         sessionStorage.removeItem('authenticationData');
-        //notificationService.success("Logout successful!");
+        notificationService.success("Logout successful!");
     };
 
     var isAuthenticated = function () {

@@ -35,7 +35,7 @@
                     return BadRequest(ModelState);
                 }
 
-                var currentUser = _userRepository.GetById();
+                var currentUser = _userRepository.GetById(userId);
 
                 if (currentUser == null)
                 {
@@ -75,7 +75,7 @@
                     return BadRequest(ModelState);
                 }
 
-                var currentUser = _userRepository.GetById();
+                var currentUser = _userRepository.GetById(userId);
                 if (currentUser == null)
                 {
                     ModelState.AddModelError("error", "User does not exist!");

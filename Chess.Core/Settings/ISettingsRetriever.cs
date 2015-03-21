@@ -1,6 +1,6 @@
 ﻿namespace Chess.Core.Settings
 {
-    public interface ISettingsRetreiver
+    public interface ISettingsRetriever
     {
         string GetSetting(string settingName);
     }

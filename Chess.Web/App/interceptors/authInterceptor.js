@@ -1,5 +1,5 @@
-﻿app.factory('authInterceptor', ['authService', '$q', '$injector',
-    function (authService, $q, $injector) {
+﻿app.factory('authInterceptor', ['authService', '$q',
+    function (authService, $q) {
         'use strict';
 
         var isNeedTokenAuth = function (config) {

@@ -14,14 +14,20 @@
         private readonly IUserRepository _userRepository;
         private readonly IAuthenticationSettings _authenticationSettings;
 
-        public UserManager(IUserRepository userRepository)
+        public UserManager(IUserRepository userRepository, IAuthenticationSettings authenticationSettings)
         {
             if (userRepository == null)
             {
                 throw new ArgumentNullException("userRepository");
             }
 
+            if (authenticationSettings == null)
+            {
+                throw new ArgumentNullException("authenticationSettings");
+            }
+
             _userRepository = userRepository;
+            _authenticationSettings = authenticationSettings;
         }
 
         public User Validate(string username, string password)
@@ -33,7 +39,6 @@
         {
             var identity = new ClaimsIdentity(authenticationType);
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
-            identity.AddClaim(new Claim(ClaimTypes.Name, user.FirstName));
 
 
             var ticket = new AuthenticationTicket(identity, new AuthenticationProperties());

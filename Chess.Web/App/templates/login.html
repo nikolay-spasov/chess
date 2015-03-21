@@ -1,0 +1,31 @@
+﻿<div class="tab-pane center-block" id="login">
+    <h3>Secure Login</h3>
+    <form method="post" novalidate name="form" ng-submit="form.$valid && login(credentials)">
+        <div class="control-group">
+            <label class="control-label" for="inputLoginLogin">
+                Username:
+            </label>
+            <div class="controls">
+                <input ng-model="credentials.username" name="username" type="text" id="inputLoginLogin" required>
+            </div>
+            <div class="help-block" ng-show="form.$submitted || form.username.$touched">
+                <div ng-show="form.username.$error.required">Please enter your username.</div>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="inputLoginPassword">
+                Password:
+            </label>
+            <div class="controls">
+                <input ng-model="credentials.password" name="password" type="password" id="inputLoginPassword" required>
+            </div>
+            <!-- /.controls -->
+            <div class="help-block" ng-show="form.$submitted || form.password.$touched">
+                <div ng-show="form.password.$error.required">Please enter your password.</div>
+            </div>
+        </div>
+        <div class="form-actions" style="margin-top: 20px;">
+            <input type="submit" value="Login" class="btn btn-primary">
+        </div>
+    </form>
+</div>

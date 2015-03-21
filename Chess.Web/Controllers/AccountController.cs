@@ -40,11 +40,11 @@
                     return BadRequest(ModelState);
                 }
 
-                var createdUser = _userRepository.CreateUser(model.Username, model.Password);
+                var createdUser = _userRepository.CreateUser(model.Username, model.Password, model.Email);
 
                 return Ok();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return BadRequest();
             }

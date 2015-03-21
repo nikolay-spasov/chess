@@ -9,6 +9,7 @@ namespace Chess.Web
         {
             bundles.Add(new ScriptBundle("~/bundles/js/lib").Include(
                 "~/Scripts/jquery-1.10.2.js",
+                "~/Scripts/toastr.min.js",
                 "~/Scripts/bootstrap.js",
                 "~/Scripts/angular.js",
                 "~/Scripts/angular-ui-router.js",
@@ -27,6 +28,7 @@ namespace Chess.Web
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
                 "~/Content/loading-bar.css",
+                "~/Content/toastr.min.css",
                 "~/Content/Site.css"
             ));
 

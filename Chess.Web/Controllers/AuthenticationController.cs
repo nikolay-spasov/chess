@@ -6,26 +6,27 @@
     using Chess.Core.Authentication;
     using Chess.Core.Logging;
     using Chess.Web.Models;
+    using Chess.Web.App_Start;
 
     public class AuthenticationController : ApiController
     {
         private readonly IUserManager _userManager;
-        private readonly ILogger _logger;
+        //private readonly ILogger _logger;
 
-        public AuthenticationController(IUserManager userManager, ILogger logger)
+        public AuthenticationController(IUserManager userManager)// ILogger logger)
         {
             if (userManager == null)
             {
                 throw new ArgumentNullException("userManager");
             }
 
-            if (logger == null)
-            {
-                throw new ArgumentNullException("logger");
-            }
+            //if (logger == null)
+            //{
+            //    throw new ArgumentNullException("logger");
+            //}
 
             _userManager = userManager;
-            _logger = logger;
+            //_logger = logger;
         }
 
         [HttpPost]
@@ -44,22 +45,13 @@
                 return BadRequest(ModelState);
             }
 
-            if (!user.Approved)
+            var ticket = _userManager.GetAuthenticationTicket(user, Startup.OAuthOptions.AuthenticationType);
+            var token = Startup.OAuthOptions.AccessTokenFormat.Protect(ticket);
+            return Ok(new
             {
-                ModelState.AddModelError("Error", "Your account is not approved!");
-                return BadRequest(ModelState);
-            }
-
-            //var ticket = _userManager.GetAuthenticationTicket(user, Startup.OAuthOptions.AuthenticationType);
-            //var token = Startup.OAuthOptions.AccessTokenFormat.Protect(ticket);
-            //var fullname = String.Format("{0} {1}", user.FirstName, user.LastName);
-            //return Ok(new
-            //{
-            //    Token = token,
-            //    Fullname = fullname,
-            //    UserId = user.Id
-            //});
-            return Ok();
+                Token = token,
+                UserId = user.Id
+            });
         }
     }
 }

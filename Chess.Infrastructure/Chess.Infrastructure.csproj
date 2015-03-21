@@ -36,6 +36,12 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -59,7 +65,11 @@
       <HintPath>..\packages\SimpleInjector.2.7.2\lib\net45\SimpleInjector.Diagnostics.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -67,7 +77,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\PasswordHasher.cs" />
+    <Compile Include="Authentication\SaltGenerator.cs" />
     <Compile Include="Authentication\UserManager.cs" />
+    <Compile Include="Database\ChessDb.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChessDb.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\ChessDb.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChessDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Database\ChessDb.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ChessDb.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Database\User.cs">
+      <DependentUpon>ChessDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Ioc\ContextDependentExtensions.cs" />
     <Compile Include="Ioc\DependencyContext.cs" />
     <Compile Include="Logging\NLogLogger.cs" />
@@ -75,6 +105,8 @@
     <Compile Include="Mapping\TempProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\UserRepository.cs" />
+    <Compile Include="Settings\AuthenticationSettings.cs" />
+    <Compile Include="Settings\WebConfigSettingsRetriever.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Chess.Core\Chess.Core.csproj">
@@ -83,7 +115,29 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <EntityDeploy Include="Database\ChessDb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ChessDb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="App.Config" />
+    <None Include="Database\ChessDb.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ChessDb.edmx</DependentUpon>
+      <LastGenOutput>ChessDb.Context.cs</LastGenOutput>
+    </None>
+    <None Include="Database\ChessDb.edmx.diagram">
+      <DependentUpon>ChessDb.edmx</DependentUpon>
+    </None>
+    <None Include="Database\ChessDb.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ChessDb.edmx</DependentUpon>
+      <LastGenOutput>ChessDb.cs</LastGenOutput>
+    </None>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets" Condition="Exists('..\packages\AutoMapper.3.3.1\tools\AutoMapper.targets')" />

@@ -8,7 +8,7 @@
 
         User GetByUsername(string username);
 
-        User CreateUser(string username, string password);
+        User CreateUser(string username, string password, string email);
 
         bool IsEmailExists(string email);
     }

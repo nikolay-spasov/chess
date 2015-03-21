@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\IPasswordHasher.cs" />
+    <Compile Include="Authentication\ISaltGenerator.cs" />
     <Compile Include="Authentication\ITokenGenerator.cs" />
     <Compile Include="Authentication\IUserManager.cs" />
     <Compile Include="Events\DomainEvents.cs" />
@@ -70,7 +71,7 @@
     <Compile Include="Repository\IUserRepository.cs" />
     <Compile Include="Settings\IAuthenticationSettings.cs" />
     <Compile Include="Settings\IEmailSettings.cs" />
-    <Compile Include="Settings\ISettingsRetreiver.cs" />
+    <Compile Include="Settings\ISettingsRetriever.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

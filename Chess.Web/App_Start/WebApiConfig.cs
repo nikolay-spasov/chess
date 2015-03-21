@@ -1,6 +1,7 @@
 ﻿namespace Chess.Web
 {
     using System.Web.Http;
+    using Newtonsoft.Json.Serialization;
 
     public static class WebApiConfig
     {
@@ -16,6 +17,10 @@
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+
+            config.Formatters.JsonFormatter.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
         }
     }
 }
