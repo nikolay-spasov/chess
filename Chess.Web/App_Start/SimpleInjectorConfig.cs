@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
+using System.Text;
 using System.Web.Mvc;
 using System.Web.Http;
 using SimpleInjector;
@@ -14,6 +16,8 @@ using Chess.Core.Authentication;
 using Chess.Infrastructure.Authentication;
 using Chess.Core.Repository;
 using Chess.Infrastructure.Repository;
+using Chess.Infrastructure.Database;
+
 
 namespace Chess.Web.App_Start
 {
@@ -44,20 +48,45 @@ namespace Chess.Web.App_Start
 
         private static void RegisterTypes(Container container)
         {
-            container.RegisterManyForOpenGeneric(typeof(IHandleDomainEvent<>),
-                container.RegisterAll, AppDomain.CurrentDomain.GetAssemblies());
+            try
+            {
+                container.RegisterManyForOpenGeneric(typeof(IHandleDomainEvent<>),
+                    container.RegisterAll, AppDomain.CurrentDomain.GetAssemblies());
 
-            // Auth
-            container.RegisterPerWebRequest<IAuthenticationSettings, AuthenticationSettings>();
-            container.RegisterPerWebRequest<IUserManager, UserManager>();
-            container.RegisterPerWebRequest<IPasswordHasher, PasswordHasher>();
-            container.RegisterPerWebRequest<ISaltGenerator, SaltGenerator>();
+                // Auth
+                container.RegisterPerWebRequest<IAuthenticationSettings, AuthenticationSettings>();
+                container.RegisterPerWebRequest<IUserManager, UserManager>();
+                container.RegisterPerWebRequest<IPasswordHasher, PasswordHasher>();
+                container.RegisterPerWebRequest<ISaltGenerator, SaltGenerator>();
 
-            // Settings
-            container.RegisterPerWebRequest<ISettingsRetriever, WebConfigSettingsRetriever>();
-            
-            // Repos
-            container.RegisterPerWebRequest<IUserRepository, UserRepository>();
+                // Settings
+                container.RegisterSingle<ISettingsRetriever, WebConfigSettingsRetriever>();
+                container.RegisterSingle<IDatabaseConnectionProvider>(() => new DatabaseConnectionProvider(container.GetInstance<ISettingsRetriever>()));
+
+                // Repos
+                container.RegisterPerWebRequest<IUserRepository, UserRepository>();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                var sb = new StringBuilder();
+                foreach (Exception exSub in ex.LoaderExceptions)
+                {
+                    sb.AppendLine(exSub.Message);
+                    var exFileNotFound = exSub as FileNotFoundException;
+                    if (exFileNotFound != null)
+                    {
+                        if (!string.IsNullOrEmpty(exFileNotFound.FusionLog))
+                        {
+                            sb.AppendLine("Fusion Log:");
+                            sb.AppendLine(exFileNotFound.FusionLog);
+                        }
+                    }
+                    sb.AppendLine();
+                }
+                string errorMessage = sb.ToString();
+
+                throw ex;
+            }
         }
     }
 }

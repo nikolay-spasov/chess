@@ -36,11 +36,8 @@
     <Reference Include="AutoMapper.Net4">
       <HintPath>..\packages\AutoMapper.3.3.1\lib\net40\AutoMapper.Net4.dll</HintPath>
     </Reference>
-    <Reference Include="EntityFramework">
-      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.dll</HintPath>
-    </Reference>
-    <Reference Include="EntityFramework.SqlServer">
-      <HintPath>..\packages\EntityFramework.6.0.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    <Reference Include="Dapper">
+      <HintPath>..\packages\Dapper.1.40\lib\net45\Dapper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -66,6 +63,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -80,24 +78,9 @@
     <Compile Include="Authentication\PasswordHasher.cs" />
     <Compile Include="Authentication\SaltGenerator.cs" />
     <Compile Include="Authentication\UserManager.cs" />
-    <Compile Include="Database\ChessDb.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ChessDb.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\ChessDb.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ChessDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Database\ChessDb.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ChessDb.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Database\User.cs">
-      <DependentUpon>ChessDb.tt</DependentUpon>
-    </Compile>
+    <Compile Include="Database\DatabaseConnectionProvider.cs" />
+    <Compile Include="Database\Entities\DbUser.cs" />
+    <Compile Include="Database\IDatabaseConnectionProvider.cs" />
     <Compile Include="Ioc\ContextDependentExtensions.cs" />
     <Compile Include="Ioc\DependencyContext.cs" />
     <Compile Include="Logging\NLogLogger.cs" />
@@ -115,27 +98,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="Database\ChessDb.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ChessDb.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="App.Config" />
-    <None Include="Database\ChessDb.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ChessDb.edmx</DependentUpon>
-      <LastGenOutput>ChessDb.Context.cs</LastGenOutput>
-    </None>
-    <None Include="Database\ChessDb.edmx.diagram">
-      <DependentUpon>ChessDb.edmx</DependentUpon>
-    </None>
-    <None Include="Database\ChessDb.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ChessDb.edmx</DependentUpon>
-      <LastGenOutput>ChessDb.cs</LastGenOutput>
+    <None Include="App.Config">
+      <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>

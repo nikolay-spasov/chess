@@ -3,5 +3,6 @@
     public interface ISettingsRetriever
     {
         string GetSetting(string settingName);
+        string GetConnectionString(string connectionStringName);
     }
 }

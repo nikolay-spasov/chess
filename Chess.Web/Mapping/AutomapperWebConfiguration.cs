@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-
-using Chess.Core.Models;
-using DB = Chess.Infrastructure.Database;
-
-namespace Chess.Web.Mapping
+﻿namespace Chess.Web.Mapping
 {
+    using AutoMapper;
+
+    using Chess.Core.Models;
+    using Chess.Infrastructure.Database.Entities;
+
     public static class AutomapperWebConfiguration
     {
         public static void Configure()
@@ -20,9 +20,9 @@ namespace Chess.Web.Mapping
     {
         protected override void Configure()
         {
-            Mapper.CreateMap<DB.User, User>();
-            Mapper.CreateMap<User, DB.User>()
-                .ForMember(dest => dest.PasswordSalt, opts => opts.UseValue(null));
+            Mapper.CreateMap<DbUser, User>();
+            Mapper.CreateMap<User, DbUser>().
+                ForMember(dest => dest.PasswordSalt, opts => opts.Ignore());
         }
     }
 }

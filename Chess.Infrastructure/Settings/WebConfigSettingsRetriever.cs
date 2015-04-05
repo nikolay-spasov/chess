@@ -10,5 +10,10 @@ namespace Chess.Infrastructure.Settings
         {
             return WebConfigurationManager.AppSettings.Get(settingName);
         }
+
+        public string GetConnectionString(string connectionStringName)
+        {
+            return WebConfigurationManager.ConnectionStrings[connectionStringName].ConnectionString;
+        }
     }
 }

@@ -4,23 +4,27 @@
     using System.Linq;
     using System.Collections.Generic;
     using AutoMapper;
+    using Dapper;
 
+    using Chess.Core.Authentication;
     using Chess.Core.Models;
     using Chess.Core.Repository;
-    using DB = Chess.Infrastructure.Database;
     using Chess.Infrastructure.Authentication;
+    using Chess.Infrastructure.Database;
+    using Chess.Infrastructure.Database.Entities;
 
     public class UserRepository : IUserRepository
     {
-        private readonly DB.ChessDbEntities _db;
-        private readonly PasswordHasher _passwordHasher;
-        private readonly SaltGenerator _saltGenerator;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly ISaltGenerator _saltGenerator;
+        private readonly IDatabaseConnectionProvider _connectionProvider;
 
-        public UserRepository(DB.ChessDbEntities db, PasswordHasher passwordHasher, SaltGenerator saltGenerator)
+        public UserRepository(IDatabaseConnectionProvider connectionProvider,
+            IPasswordHasher passwordHasher, ISaltGenerator saltGenerator)
         {
-            if (db == null)
+            if (connectionProvider == null)
             {
-                throw new ArgumentNullException("db");
+                throw new ArgumentNullException("connectionProvider");
             }
 
             if (passwordHasher == null)
@@ -33,70 +37,116 @@
                 throw new ArgumentNullException("saltGenerator");
             }
 
-            _db = db;
+            _connectionProvider = connectionProvider;
             _passwordHasher = passwordHasher;
             _saltGenerator = saltGenerator;
         }
 
         public User GetByUsernameAndPassword(string username, string password)
         {
-            var dbUser = _db.Users.FirstOrDefault(u => u.Username == username);
-            if (dbUser == null)
+            DbUser user = null;
+            using (var connection = _connectionProvider.GetOpenConnection())
             {
-                return null;
+                user = connection.Query<DbUser>(
+                    "SELECT * " +
+                    "FROM DbUsers " +
+                    "WHERE Username = @username", new { username = username })
+                    .FirstOrDefault();
             }
 
-            var hashedPassword = _passwordHasher.HashPassword(password + dbUser.PasswordSalt);
-            if (hashedPassword != dbUser.Password)
+            var hashedPassword = _passwordHasher.HashPassword(password + user.PasswordSalt);
+            if (hashedPassword == user.Password)
             {
-                return null;
+                return Mapper.Map<User>(user);
             }
 
-            return Mapper.Map<User>(dbUser);
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            var dbUsers = _db.Users.AsEnumerable();
-
-            return Mapper.Map<IEnumerable<User>>(dbUsers);
-        }
-
-        public User GetById(object id)
-        {
-            var dbUser = _db.Users.FirstOrDefault(x => x.Id == (int) id);
-
-            return Mapper.Map<User>(dbUser);
+            return null;
         }
 
         public User GetByUsername(string username)
         {
-            var dbUser = _db.Users.FirstOrDefault(x => x.Username == username);
+            DbUser user = null;
+            using (var connection = _connectionProvider.GetOpenConnection())
+            {
+                user = connection.Query<DbUser>(
+                    "SELECT * " +
+                    "FROM DbUsers " +
+                    "WHERE Username = @username", new
+                    {
+                        username = username,
+                    }).FirstOrDefault();
 
-            return Mapper.Map<User>(dbUser);
+                return Mapper.Map<User>(user);
+            }
         }
 
         public User CreateUser(string username, string password, string email)
         {
-            var salt = _saltGenerator.GenerateSalt();
-
-            var user = new DB.User
+            var salt = _saltGenerator.GenerateSalt(64);
+            var userId = 0;
+            DbUser user = null;
+            using (var connection = _connectionProvider.GetOpenConnection())
             {
-                Username = username,
-                Password = _passwordHasher.HashPassword(password + salt),
-                Email = email,
-                PasswordSalt = salt,
-            };
+                using (var tran = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        userId = connection.Query<int>(
+                            "INSERT INTO DBUsers(Username, Email, Password, PasswordSalt) VALUES(" +
+                            "@username, @email, @password, @passwordSalt) " + 
+                            "SELECT @@SCOPE_IDENTITY()", new
+                            {
+                                username = username,
+                                email = email,
+                                passwordSalt = salt,
+                                password = _passwordHasher.HashPassword(salt + password)
+                            }, tran).First();
 
-            _db.Users.Add(user);
-            _db.SaveChanges();
+                        var dbUser = connection.Query<DbUser>(
+                            "SELECT * FROM DbUsers WHERE Id = @id", new { id = userId }, tran);
+
+                        tran.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        tran.Rollback();
+                        throw;
+                    }
+                }
+            }
 
             return Mapper.Map<User>(user);
         }
 
         public bool IsEmailExists(string email)
         {
-            return _db.Users.Any(u => u.Email == email);
+            using (var connection = _connectionProvider.GetOpenConnection())
+            {
+                var mailCount = connection.Query<int>("SELECT COUNT(*) FROM DbUsers WHERE Email = @email",
+                    new { email = email }).First();
+
+                return mailCount > 0;
+            }
+        }
+
+        public IEnumerable<User> GetAll()
+        {
+            using (var connection = _connectionProvider.GetOpenConnection())
+            {
+                var dbUsers = connection.Query<DbUser>("SELECT * FROM DbUsers");
+                return Mapper.Map<IEnumerable<User>>(dbUsers);
+            }
+        }
+
+        public User GetById(object id)
+        {
+            using (var connection = _connectionProvider.GetOpenConnection())
+            {
+                var dbUser = connection.Query<DbUser>(
+                    "SELECT * FROM DbUsers " +
+                    "WHERE Id = @id", new { id = (int)id }).First();
+                return Mapper.Map<User>(dbUser);
+            }
         }
     }
 }
