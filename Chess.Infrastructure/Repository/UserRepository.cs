@@ -49,9 +49,14 @@
             {
                 user = connection.Query<DbUser>(
                     "SELECT * " +
-                    "FROM DbUsers " +
+                    "FROM Users " +
                     "WHERE Username = @username", new { username = username })
                     .FirstOrDefault();
+            }
+
+            if (user == null)
+            {
+                return null;
             }
 
             var hashedPassword = _passwordHasher.HashPassword(password + user.PasswordSalt);
@@ -70,7 +75,7 @@
             {
                 user = connection.Query<DbUser>(
                     "SELECT * " +
-                    "FROM DbUsers " +
+                    "FROM Users " +
                     "WHERE Username = @username", new
                     {
                         username = username,
@@ -92,7 +97,7 @@
                     try
                     {
                         userId = connection.Query<int>(
-                            "INSERT INTO DBUsers(Username, Email, Password, PasswordSalt) VALUES(" +
+                            "INSERT INTO Users(Username, Email, Password, PasswordSalt) VALUES(" +
                             "@username, @email, @password, @passwordSalt) " + 
                             "SELECT @@SCOPE_IDENTITY()", new
                             {
@@ -103,7 +108,7 @@
                             }, tran).First();
 
                         var dbUser = connection.Query<DbUser>(
-                            "SELECT * FROM DbUsers WHERE Id = @id", new { id = userId }, tran);
+                            "SELECT * FROM Users WHERE Id = @id", new { id = userId }, tran);
 
                         tran.Commit();
                     }
@@ -122,7 +127,7 @@
         {
             using (var connection = _connectionProvider.GetOpenConnection())
             {
-                var mailCount = connection.Query<int>("SELECT COUNT(*) FROM DbUsers WHERE Email = @email",
+                var mailCount = connection.Query<int>("SELECT COUNT(*) FROM Users WHERE Email = @email",
                     new { email = email }).First();
 
                 return mailCount > 0;
@@ -133,7 +138,7 @@
         {
             using (var connection = _connectionProvider.GetOpenConnection())
             {
-                var dbUsers = connection.Query<DbUser>("SELECT * FROM DbUsers");
+                var dbUsers = connection.Query<DbUser>("SELECT * FROM Users");
                 return Mapper.Map<IEnumerable<User>>(dbUsers);
             }
         }
@@ -143,7 +148,7 @@
             using (var connection = _connectionProvider.GetOpenConnection())
             {
                 var dbUser = connection.Query<DbUser>(
-                    "SELECT * FROM DbUsers " +
+                    "SELECT * FROM Users " +
                     "WHERE Id = @id", new { id = (int)id }).First();
                 return Mapper.Map<User>(dbUser);
             }

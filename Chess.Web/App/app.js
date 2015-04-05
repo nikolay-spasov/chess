@@ -36,6 +36,11 @@ app.config(['$stateProvider', '$httpProvider', '$urlRouterProvider', function ($
         controller: 'registerController'
     });
 
+    $stateProvider.state('lobby', {
+        url: '/lobby',
+        templateUrl: '/App/templates/lobby.html',
+        controller: 'lobbyController'
+    });
     
 }]);
 
