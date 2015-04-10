@@ -9,7 +9,6 @@
     using Chess.Core.Authentication;
     using Chess.Core.Models;
     using Chess.Core.Repository;
-    using Chess.Infrastructure.Authentication;
     using Chess.Infrastructure.Database;
     using Chess.Infrastructure.Database.Entities;
 
@@ -48,9 +47,10 @@
             using (var connection = _connectionProvider.GetOpenConnection())
             {
                 user = connection.Query<DbUser>(
-                    "SELECT * " +
-                    "FROM Users " +
-                    "WHERE Username = @username", new { username = username })
+                    @"
+                    SELECT * 
+                    FROM Users
+                    WHERE Username = @username", new { username = username })
                     .FirstOrDefault();
             }
 

@@ -65,8 +65,10 @@
     <Compile Include="Logging\LogEntry.cs" />
     <Compile Include="Logging\LoggerExtensions.cs" />
     <Compile Include="Logging\LoggingEventType.cs" />
+    <Compile Include="Models\Game.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\IGameRepository.cs" />
     <Compile Include="Repository\IRepository.cs" />
     <Compile Include="Repository\IUserRepository.cs" />
     <Compile Include="Settings\IAuthenticationSettings.cs" />
