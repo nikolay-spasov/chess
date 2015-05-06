@@ -47,8 +47,7 @@
             using (var connection = _connectionProvider.GetOpenConnection())
             {
                 user = connection.Query<DbUser>(
-                    @"
-                    SELECT * 
+                    @"SELECT * 
                     FROM Users
                     WHERE Username = @username", new { username = username })
                     .FirstOrDefault();
@@ -59,7 +58,7 @@
                 return null;
             }
 
-            var hashedPassword = _passwordHasher.HashPassword(password + user.PasswordSalt);
+            var hashedPassword = _passwordHasher.HashPassword(user.PasswordSalt + password);
             if (hashedPassword == user.Password)
             {
                 return Mapper.Map<User>(user);
@@ -99,7 +98,7 @@
                         userId = connection.Query<int>(
                             "INSERT INTO Users(Username, Email, Password, PasswordSalt) VALUES(" +
                             "@username, @email, @password, @passwordSalt) " + 
-                            "SELECT @@SCOPE_IDENTITY()", new
+                            "SELECT SCOPE_IDENTITY()", new
                             {
                                 username = username,
                                 email = email,
@@ -107,8 +106,9 @@
                                 password = _passwordHasher.HashPassword(salt + password)
                             }, tran).First();
 
-                        var dbUser = connection.Query<DbUser>(
-                            "SELECT * FROM Users WHERE Id = @id", new { id = userId }, tran);
+                        user = connection.Query<DbUser>(
+                            "SELECT * FROM Users WHERE Id = @id", new { id = userId }, tran)
+                            .FirstOrDefault();
 
                         tran.Commit();
                     }

@@ -2,13 +2,12 @@
     'use strict';
 
     $scope.register = function (credentials) {
-        console.log('exceuting')
 
-        registerService.registerUser(credentials).then(function (data) {
+        registerService.registerUser(credentials).then(function(data) {
             console.log(data);
-        }, function (err) {
+        }, function(err) {
             console.error(err);
-        })
+        });
     };
 
 }]);
