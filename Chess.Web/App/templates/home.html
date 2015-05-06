@@ -1,2 +1,35 @@
-﻿<h2>{{text}}</h2>
-<h2>{{url}}</h2>
+﻿<div class="row">
+    <fieldset>
+        <button class="btn btn-primary btn-lg" ng-click="btnPlayClicked()">Play</button>
+    </fieldset>
+</div>
+<div class="row" ng-show="showGamesFilterOptions">
+    <form name="findGameForm">
+        <div class="form-group">
+            <label for="minutes-input">Minutes:</label>
+            <input id="minutes-input" class="form-control" type="number" name="minutes"
+                   max="60"
+                   min="1"
+                   step="1"
+                   ng-model="findGameCriteria.minutes" />
+        </div>
+        <div class="form-group">
+            <label>
+                <input type="radio" name="color" value="white" ng-model="findGameCriteria.color" />
+                White
+            </label>
+            <label>
+                <input type="radio" name="color" value="black" ng-model="findGameCriteria.color" />
+                Black
+            </label>
+            <label>
+                <input type="radio" name="color" value="whatever" checked="checked" ng-model="findGameCriteria.color"/>
+                Whatever
+            </label>
+        </div>
+        <div class="form-group">
+            <input ng-click="okBtnClicked()" class="btn btn-primary btn-success" type="submit" value="OK" />
+            <input ng-click="cancelBtnClicked()" class="btn btn-primary btn-danger" type="button" value="Cancel" />
+        </div>
+    </form>
+</div>

@@ -65,6 +65,7 @@ namespace Chess.Web.App_Start
 
                 // Repos
                 container.RegisterPerWebRequest<IUserRepository, UserRepository>();
+                container.RegisterPerWebRequest<IGameRepository, GameRepository>();
             }
             catch (ReflectionTypeLoadException ex)
             {

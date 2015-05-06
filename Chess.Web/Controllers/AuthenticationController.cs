@@ -47,11 +47,8 @@
 
             var ticket = _userManager.GetAuthenticationTicket(user, Startup.OAuthOptions.AuthenticationType);
             var token = Startup.OAuthOptions.AccessTokenFormat.Protect(ticket);
-            return Ok(new
-            {
-                Token = token,
-                UserId = user.Id
-            });
+            return Ok(
+                new { Token = token, UserId = user.Id });
         }
     }
 }

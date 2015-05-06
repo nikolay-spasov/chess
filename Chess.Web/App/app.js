@@ -21,7 +21,8 @@ app.config(['$stateProvider', '$httpProvider', '$urlRouterProvider', function ($
     $stateProvider.state('home', {
         url: '/',
         templateUrl: '/App/templates/home.html',
-        controller: 'homeController'
+        controller: 'homeController',
+        authenticate: true
     });
 
     $stateProvider.state('login', {

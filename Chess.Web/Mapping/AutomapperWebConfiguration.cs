@@ -21,8 +21,8 @@
         protected override void Configure()
         {
             Mapper.CreateMap<DbUser, User>();
-            Mapper.CreateMap<User, DbUser>().
-                ForMember(dest => dest.PasswordSalt, opts => opts.Ignore());
+            Mapper.CreateMap<User, DbUser>()
+                .ForMember(dest => dest.PasswordSalt, opts => opts.Ignore());
         }
     }
 }

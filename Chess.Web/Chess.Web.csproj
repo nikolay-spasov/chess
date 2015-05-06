@@ -187,6 +187,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AuthenticationController.cs" />
+    <Compile Include="Controllers\GameController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -196,6 +197,7 @@
     <Compile Include="Mapping\AutomapperWebConfiguration.cs" />
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
+    <Compile Include="Models\SearchGameModel.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -203,9 +205,11 @@
     <Content Include="App\app.js" />
     <Content Include="App\controllers\homeController.js" />
     <Content Include="App\controllers\loginController.js" />
+    <Content Include="App\controllers\mainController.js" />
     <Content Include="App\controllers\registerController.js" />
     <Content Include="App\interceptors\authInterceptor.js" />
     <Content Include="App\services\authService.js" />
+    <Content Include="App\services\gameService.js" />
     <Content Include="App\services\modelStateErrorsService.js" />
     <Content Include="App\services\notificationService.js" />
     <Content Include="App\services\registerService.js" />

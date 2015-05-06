@@ -19,8 +19,7 @@
                 throw new ArgumentNullException("settings");
             }
 
-            factory = DbProviderFactories
-                .GetFactory("System.Data.SqlClient");
+            factory = DbProviderFactories.GetFactory("System.Data.SqlClient");
             this.connectionString = settings.GetConnectionString("ChessDb");
         }
 
